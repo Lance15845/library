@@ -99,7 +99,7 @@ public void actionPerformed(ActionEvent e) {
 		}
 	}
 ```
-#### 2.4.2 用户信息修改实现
+#### 2.4.3 用户信息修改实现
 &ensp;&ensp;&ensp;&ensp;用户信息修改包括用户名和用户密码的修改，进入信息修改界面后，需先查找要修改的用户，由监听器传输输入信息，若该用户存在可选择要修改的项目，空项默认输入为“null”系统自动略过不进行修改，其他数据将由监听器同步到数据库。若该用户不存在，系统会弹出提示窗口，询问是否需要添加新用户。
 ##### 用户信息修改关键代码如下：
 ```
@@ -145,6 +145,213 @@ public void actionPerformed(ActionEvent e) {
 			af.Ad_Fail();
 		}
 	}
+```
+#### 2.4.4 用户信息清单实现
+##### 用户信息清单关键代码如下：
+```
+ArrayList<Users> arrayList = new UsersDao().showUsers();
+		String[][] objects = new String[arrayList.size()][3];
+		int temp = 0;
+		for (Users users : arrayList){
+			objects[temp][0] = String.valueOf(users.getUserId());
+			objects[temp][1] = users.getUserName();
+			objects[temp][2] = users.getUserPassword();
+			temp++;
+}
+		table = new JTable();
+		table.setModel(new DefaultTableModel(
+			 objects,
+			new String[] {
+				"用户ID", "用户名", "用户密码"
+			}
+		));
+```
+### 2.5 图书信息管理实现
+&ensp;&ensp;&ensp;&ensp;管理员登录成功后进入图书管理界面，可以对数据库中储存的图书数据信息进行一些列的处理，书目的删除，新书数据的添加，库存数量的增删和原有书目信息的修改。
+#### 2.5.1 图书信息增加实现
+&ensp;&ensp;&ensp;&ensp;新书的添加要求用户输入输入一系列的图书信息，包括图书编号，图书名称，图书作者，ISBA，馆存量，图书价格，将信息通过监听器传导到数据库，查询是否存在，若不存在则创建一个新的书类，分别存入各项信息。
+##### 图书信息增加关键代码如下：
+```
+public void actionPerformed(ActionEvent e) {
+		String id = id1.getText();
+		String name = name1.getText();
+		String writer = writer1.getText();
+		String isbn = isbn1.getText();
+		String num = num1.getText();
+		String cost = cost1.getText();
+		Books books = new Books(id, name, writer, isbn, Integer.parseInt(num), Double.parseDouble(cost));
+		// 数据库处理
+		boolean bool = new BooksDao().addBooks(books);
+		// 图书增加成功
+		if (bool){
+			Success success = new Success();
+			success.Success();
+		}else{
+			// 图书增加失败
+			Fail fail = new Fail();
+			fail.main(null);
+		}
+	}
+```
+#### 2.5.2 图书信息删除实现
+&ensp;&ensp;&ensp;&ensp;书目的删除要求输入书目的id，由监听器传入数据在数据库中遍历，若存在则将书目的整体信息删除，若未找到该书目则告知用户操作失败。
+##### 图书信息删除关键代码如下：
+```
+public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		String name = name1.getText();
+		// 数据库处理
+		boolean boolDeleteBooks = new BooksDao().deleteBooks(name);
+		// 图书信息删除成功
+		if(boolDeleteBooks) {
+			Success suc = new Success();
+			suc.Success();
+		}else {
+			// 图书信息删除失败
+			Fail fail = new Fail();
+			fail.main(null);
+		}
+	}
+```
+#### 2.5.3 图书信息修改实现
+&ensp;&ensp;&ensp;&ensp;信息修改包括书名和价格的修改，进入信息修改界面后，需先查找要修改的书目，由监听器传输输入信息，若该书存在可选择要修改的项目，空项默认输入为“null”系统自动略过不进行修改，其他数据将由监听器同步到数据库。若该书不存在，系统会弹出提示窗口，询问是否需要添加新书。
+##### 图书信息修改关键代码如下：
+```
+// 修改图书价格
+	public void actionPerformed(ActionEvent e) {
+		String cost = cost1.getText();
+		String Prename = Prename1;
+		ArrayList<Books> booksList = new ArrayList<>();
+		// 查询
+		booksList = new BooksDao().queryBooks(Prename, Prename);
+		if (booksList.size() > 0){
+			Books books = booksList.get(0);
+			// 数据库处理
+			books.setBookPrice(Double.parseDouble(cost));
+			boolean boolPrice = new BooksDao().updateBooks(3, books);
+			if(boolPrice) {
+				Success suc = new Success();
+				suc.Success();
+			}
+		}else {
+			Ad_bFail af = new Ad_bFail();
+			af.Ad_Fail();
+		}
+	}
+
+	// 修改图书名称
+	public void actionPerformed(ActionEvent e) {
+		String name = name1.getText();
+		String Prename = Prename1;
+		ArrayList<Books> booksList = new ArrayList<>();
+		//数据库处理
+		booksList = new BooksDao().queryBooks(Prename, Prename);
+		try {
+			if (booksList.size() > 0){
+				Books books = booksList.get(0);
+				books.setBookName(name);
+				boolean boolName = new BooksDao().updateBooks(1, books);
+				if(boolName) {
+					// 修改成功
+					Success suc = new Success();
+					suc.Success();
+				}
+			} else {
+				// 修改失败
+				Ad_uFail auf = new Ad_uFail();
+				auf.main(null);
+			}
+		}catch (Exception exception){
+			exception.printStackTrace();
+		}
+	}
+```
+#### 2.5.4 图书库存修改实现
+&ensp;&ensp;&ensp;&ensp;信息修改包括书名和价格的修改，进入信息修改界面后，需先查找要修改的书目，由监听器传输输入信息，若该书存在可选择要修改的项目，空项默认输入为“null”系统自动略过不进行修改，其他数据将由监听器同步到数据库。若该书不存在，系统会弹出提示窗口，询问是否需要添加新书。
+##### 图书库存修改关键代码如下：
+```
+// 图书馆存量增加
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		String name = name1.getText();
+		String num = num1.getText();
+		ArrayList<Books> booksList = new BooksDao().queryBooks(name, name);
+		Books books = booksList.get(0);
+		books.setBookNum(books.getBookNum() + Integer.parseInt(num));
+		// 数据库处理
+		boolean boolNum = new BooksDao().updateBooks(2, books);
+		if(boolNum){
+			//增加成功
+			Success as = new Success();
+			as.Success();
+		}else{
+			//失败界面
+			Ad_bFail af=new Ad_bFail();
+			af.Ad_Fail();
+		}
+	}
+
+	// 图书馆存量减少
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		String name = name1.getText();
+		String num = num1.getText();
+		ArrayList<Books> booksList = new BooksDao().queryBooks(name, name);
+		Books books = booksList.get(0);
+		books.setBookNum(books.getBookNum() - Integer.parseInt(num));
+		// 数据库处理
+		boolean boolNum = new BooksDao().updateBooks(2, books);
+		if(boolNum){
+			//修改成功
+			Success as=new Success();
+			as.Success();
+		}else{
+			//修改失败
+			Ad_bFail af = new Ad_bFail();
+			af.Ad_Fail();
+		}
+	}
+```
+#### 2.5.4 图书库存修改实现
+##### 图书库存修改关键代码如下：
+```
+ArrayList<Books> booksList = new BooksDao().showBooks();
+		String[][] objects = new String[booksList.size()][8];
+		int temp = 0;
+		for (Books books : booksList){
+			objects[temp][0] = books.getBookId();
+			objects[temp][1] = books.getBookName();
+			objects[temp][2] = books.getBookWriter();
+			objects[temp][3] = books.getBookIsbn();
+			objects[temp][4] = String.valueOf(books.getBookNum());
+			objects[temp][5] = String.valueOf(books.getBookPrice());
+			objects[temp][6] = String.valueOf(books.getBookNumBroughtOut());
+			objects[temp][7] = String.valueOf(books.getBookNumBroughtOut());
+			temp++;
+		}
+		table = new JTable();
+		table.setModel(new DefaultTableModel(
+				objects,
+				new String[] {"图书编码", "图书名称", "图书作者", "图书ISBN", "图书馆存量", "图书价格", "图书外借量", "图书借阅次数"
+				}
+		));
+```
+### 2.6 图书借阅功能实现
+&ensp;&ensp;&ensp;&ensp;在这个模块中，普通用户可以通过输入要借阅的图书名称来完成图书借阅的功能。 在普通用户登录之后，点击图书借阅按钮，会弹出一个输入图书名称的窗口，输入图书名称后，点击借阅，会进行业务处理。如果该图书存在并且馆存量不小于等于0，那么借阅成功，否则借阅失败，转到借阅失败界面。
+##### 图书借阅功能关键代码如下：
+```
+public void actionPerformed(ActionEvent e) {
+		// 检测到按钮被点击自动计入到这个函数，这个函数是ActionListener类的方法
+		// 接下来获取文本框里面的字符串
+		String bookname = name.getText();
+		// number--;借阅后书本数量减一
+		Jieyuesuccess jys = new Jieyuesuccess();
+		jys.main(null);
+	}
+JieyueListener jy = new JieyueListener();
+		btnNewButton.addActionListener(jy);
+		jy.setJt(textField);
+//创建借阅监听器
 ```
 ## 三、设计概要
 实验要求实现六个匹配算法，分析三种算法的时间复杂性，通过应用三种算法在一个较长英文文本中查找一个子串的实验数据来对比三种算法的运行时间。涉及的三个算法如下：  
