@@ -53,6 +53,99 @@ public void actionPerformed(ActionEvent e) {
 			sc.main(null);
 		} else {}// 登录失败界面
 ```
+### 2.3 管理员登录实现
+&ensp;&ensp;&ensp;&ensp;管理员点击管理员登录之后，会跳出窗口要求输入管理员名，管理员密码。输入后点击登录会执行业务逻辑处理，如果验证正确进入功能选择界面，否则返回主界面。登录成功进入用户界面后，用户可以开始选择功能，如用户管理，书籍管理和返回主页面，进入各个菜单栏后还有细化的功能可以进一步选择。如果登录失败，会返回系统菜单，重新要求输入管理员名，管理员密码。需再次执行操作。管理员账户唯一，存在数据库中，会用户输入的值会与数据库中的值进行比对，再由监听器向使用者反馈对比情况。
+### 2.4 用户信息增减修改
+#### 2.4.1 用户信息增加实现
+&ensp;&ensp;&ensp;&ensp;新用户的添加要求用户输入输入一系列的用户信息，包括用户名，用户密码，将信息通过监听器传导到数据库，查询是否存在，若不存在则创建一个新的用户类，分别存入各项信息。
+##### 用户信息增加关键代码如下：
+```
+public void actionPerformed(ActionEvent e) {
+		String password = password1.getText();
+		String name = name1.getText();
+		String id = id1.getText();
+		Users user = new Users(Integer.parseInt(id), name, password);
+		// 数据库处理
+		boolean bool  = new UsersDao().addUser(user);
+		// 用户增加成功
+		if (bool){
+			Success success = new Success();
+			success.Success();
+		}else{ 
+// 用户增加失败
+			Fail fail = new Fail();
+			fail.main(null);
+		}
+	}
+```
+#### 2.4.2 用户信息删除实现
+&ensp;&ensp;&ensp;&ensp;用户的删除要求输入用户的ID，由监听器传入数据在数据库中遍历，若存在则将此用户的信息整体删除，若未找到该用户则告知用户操作失败。
+##### 用户信息删除关键代码如下：
+```
+public void actionPerformed(ActionEvent e) {
+		String name = name1.getText();
+		// 数据库处理
+		boolean bool = new UsersDao().deleteUsers(Integer.parseInt(name));
+		// 用户删除成功
+		if (bool){
+			System.out.println("成功");
+			Success success = new Success();
+			success.Success();
+		}else{
+			// 用户删除失败
+			System.out.println("失败");
+			Fail fail = new Fail();
+			fail.main(null);
+		}
+	}
+```
+#### 2.4.2 用户信息修改实现
+&ensp;&ensp;&ensp;&ensp;用户信息修改包括用户名和用户密码的修改，进入信息修改界面后，需先查找要修改的用户，由监听器传输输入信息，若该用户存在可选择要修改的项目，空项默认输入为“null”系统自动略过不进行修改，其他数据将由监听器同步到数据库。若该用户不存在，系统会弹出提示窗口，询问是否需要添加新用户。
+##### 用户信息修改关键代码如下：
+```
+// 修改用户名称
+	public void actionPerformed(ActionEvent e) {
+		String name = name1.getText();
+		String Prename = Prename1;
+		ArrayList<Books> booksList = new ArrayList<>();
+		booksList = new BooksDao().queryBooks(Prename, Prename);
+		try {
+			if (booksList.size() > 0){
+				Books books = booksList.get(0);
+				books.setBookName(name);
+				boolean boolName = new BooksDao().updateBooks(1, books);
+				if(boolName) {
+					Success suc = new Success();
+					suc.Success();
+				}
+			} else {
+				Ad_uFail auf = new Ad_uFail();
+				auf.main(null);
+			}
+		}catch (Exception exception){
+			exception.printStackTrace();
+		}
+	}
+// 修改用户密码
+	public void actionPerformed(ActionEvent e) {
+		String password = password1.getText();
+		String preName = preName1;
+		ArrayList<Users> usersList = new ArrayList<>();
+		usersList = new UsersDao().queryUsers(-1, preName);
+		if (usersList.size() > 0){
+			Users users = usersList.get(0);
+			users.setUserPassword(password);
+			boolean boolPassword = new UsersDao().updateUsers(2,users);
+			if( boolPassword) {
+				Success suc = new Success();
+				suc.Success();
+			}
+		}else {
+			Ad_bFail af = new Ad_bFail();
+			af.Ad_Fail();
+		}
+	}
+```
 ## 三、设计概要
 实验要求实现六个匹配算法，分析三种算法的时间复杂性，通过应用三种算法在一个较长英文文本中查找一个子串的实验数据来对比三种算法的运行时间。涉及的三个算法如下：  
 
