@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" native2AsciiForPropertiesFiles="true" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$/src/GUI/logIn/LogIn.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/GUI/user/Book_List.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/GUI/user/ButListener.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/GUI/user/Chazhao.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/GUI/user/Chazhaobooks.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/GUI/user/ChazhaonameListener.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/GUI/user/Chazhaonamebooks.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/GUI/user/ChazhaonumbListener.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/GUI/user/Chazhaonumbbooks.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/GUI/user/Guihuan.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/GUI/user/GuihuanListener.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/GUI/user/Guihuansuccess.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/GUI/user/Jieyue.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/GUI/user/JieyueListener.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/GUI/user/Jieyuesuccess.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/GUI/user/Login.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/GUI/user/MimaListener.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/GUI/user/Success.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/GUI/user/User.java" charset="GBK" />
+    <file url="PROJECT" charset="GBK" />
+  </component>
+</project>
